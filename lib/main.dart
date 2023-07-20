@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme(
             brightness: Brightness.light,
-            primary: Color(0xFF86FF84),
-            onPrimary: Color(0xFF86FF84),
+            primary: Colors.blue,
+            onPrimary: Colors.blue,
             secondary: Colors.black,
             onSecondary: Colors.black,
             error: Colors.red,
