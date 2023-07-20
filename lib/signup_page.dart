@@ -3,6 +3,7 @@ import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
 import 'package:krishishop/login_page.dart';
+import 'package:krishishop/phone_register.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -51,8 +52,10 @@ class SignupPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 MyButton(
                   onTap: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhoneRegister()));
                   },
                   title: 'Sign up',
                 ),
