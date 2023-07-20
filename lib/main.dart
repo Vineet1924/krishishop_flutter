@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:krishishop/SplashScreen.dart';
-import 'package:krishishop/signup_page.dart';
 
 void main() {
   runApp(const MyApp());

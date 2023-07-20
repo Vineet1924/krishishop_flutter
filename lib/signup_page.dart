@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
-import 'package:krishishop/login_page.dart';
 import 'package:krishishop/phone_register.dart';
 
 class SignupPage extends StatelessWidget {
@@ -100,6 +99,9 @@ class SignupPage extends StatelessWidget {
                     ),
                     SquareTile(
                         imagePath: 'assets/images/facebook.png',
+                        signInMethod: () {}),
+                    SquareTile(
+                        imagePath: 'assets/images/phone.png',
                         signInMethod: () {}),
                   ],
                 ),

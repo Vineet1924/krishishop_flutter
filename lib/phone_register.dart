@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
+import 'package:krishishop/phone_verification.dart';
 
 class PhoneRegister extends StatelessWidget {
   const PhoneRegister({super.key});
@@ -77,7 +78,14 @@ class PhoneRegister extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 50),
-                MyButton(onTap: () {}, title: 'Send Code'),
+                MyButton(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PhoneVerification()));
+                    },
+                    title: 'Send Code'),
               ],
             ),
           ),
