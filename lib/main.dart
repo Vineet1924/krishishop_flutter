@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishishop/SplashScreen.dart';
+import 'package:krishishop/signup_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +17,8 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.light,
             primary: Colors.blue,
             onPrimary: Colors.blue,
-            secondary: Colors.black,
-            onSecondary: Colors.black,
+            secondary: Colors.blue,
+            onSecondary: Colors.blue,
             error: Colors.red,
             onError: Colors.red,
             background: Colors.grey.shade300,

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
-import 'package:krishishop/signup_page.dart';
+import 'package:krishishop/login_page.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class SignupPage extends StatelessWidget {
+  SignupPage({super.key});
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 Text(
-                  'Welcome back you\'ve been missed!',
+                  'Let\'s create your Account!',
                   style: TextStyle(color: Colors.grey[600], fontSize: 16),
                 ),
                 const SizedBox(height: 30),
@@ -42,26 +42,19 @@ class LoginPage extends StatelessWidget {
                   hintText: "Password",
                   obscureText: true,
                 ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password!',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 20),
+                MyTextField(
+                  controller: passwordController,
+                  hintText: "Confirm Password",
+                  obscureText: false,
                 ),
                 const SizedBox(height: 30),
                 MyButton(
                   onTap: () {
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => SignupPage()));
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
-                  title: 'Sign in',
+                  title: 'Sign up',
                 ),
                 const SizedBox(height: 20),
                 Padding(
@@ -105,12 +98,6 @@ class LoginPage extends StatelessWidget {
                     SquareTile(
                         imagePath: 'assets/images/facebook.png',
                         signInMethod: () {}),
-                    SizedBox(
-                      width: 25,
-                    ),
-                    SquareTile(
-                        imagePath: 'assets/images/phone.png',
-                        signInMethod: () {}),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -118,17 +105,17 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a Member?',
+                      'Already have and Account?',
                       style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 15,
+                        fontSize: 16,
                       ),
                     ),
                     SizedBox(
                       width: 4,
                     ),
                     Text(
-                      'Register now',
+                      'Sign in',
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 16,
