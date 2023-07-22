@@ -100,6 +100,9 @@ class SignupPage extends StatelessWidget {
                     SquareTile(
                         imagePath: 'assets/images/facebook.png',
                         signInMethod: () {}),
+                    SizedBox(
+                      width: 25,
+                    ),
                     SquareTile(
                         imagePath: 'assets/images/phone.png',
                         signInMethod: () {}),

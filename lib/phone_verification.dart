@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:krishishop/components/OTP_box.dart';
+import 'package:krishishop/forgot_password.dart';
 import 'components/my_button.dart';
-import 'login_page.dart';
 
 class PhoneVerification extends StatelessWidget {
   const PhoneVerification({super.key});
@@ -63,8 +63,10 @@ class PhoneVerification extends StatelessWidget {
                 const SizedBox(height: 30),
                 MyButton(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPassword()));
                     },
                     title: 'Verify'),
               ],
