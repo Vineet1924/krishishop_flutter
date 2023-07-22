@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
+import 'package:krishishop/dasboard.dart';
+import 'package:krishishop/forgot_password.dart';
+import 'package:krishishop/phone_register.dart';
 import 'package:krishishop/signup_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -33,14 +36,16 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 MyTextField(
                   controller: usernameController,
-                  hintText: "Username",
+                  hintText: "Email",
                   obscureText: false,
+                  inputType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
                   controller: passwordController,
                   hintText: "Password",
                   obscureText: true,
+                  inputType: TextInputType.text,
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -48,9 +53,17 @@ class LoginPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Forgot Password!',
-                        style: TextStyle(color: Colors.grey[600]),
+                      GestureDetector(
+                        child: Text(
+                          'Forgot Password!',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPassword()));
+                        },
                       ),
                     ],
                   ),
@@ -58,8 +71,8 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 MyButton(
                   onTap: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => SignupPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Dashboard()));
                   },
                   title: 'Sign in',
                 ),
@@ -97,20 +110,28 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SquareTile(
-                        imagePath: 'assets/images/google.png',
-                        signInMethod: () {}),
+                      imagePath: 'assets/images/google.png',
+                    ),
                     SizedBox(
                       width: 25,
                     ),
                     SquareTile(
-                        imagePath: 'assets/images/facebook.png',
-                        signInMethod: () {}),
+                      imagePath: 'assets/images/facebook.png',
+                    ),
                     SizedBox(
                       width: 25,
                     ),
-                    SquareTile(
+                    GestureDetector(
+                      child: SquareTile(
                         imagePath: 'assets/images/phone.png',
-                        signInMethod: () {}),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PhoneRegister()));
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -127,12 +148,20 @@ class LoginPage extends StatelessWidget {
                     SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
+                    GestureDetector(
+                      child: Text(
+                        'Register now',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                        ),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupPage()));
+                      },
                     ),
                   ],
                 ),

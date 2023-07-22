@@ -4,12 +4,14 @@ class MyTextField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
+  final TextInputType inputType;
 
   const MyTextField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    required this.inputType,
   });
 
   @override
@@ -28,6 +30,7 @@ class MyTextField extends StatelessWidget {
           hintText: hintText,
         ),
         obscureText: obscureText,
+        keyboardType: inputType,
       ),
     );
   }

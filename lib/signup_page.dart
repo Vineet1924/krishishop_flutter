@@ -1,14 +1,49 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
+import 'package:krishishop/components/my_snackbar.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
+import 'package:krishishop/login_page.dart';
 import 'package:krishishop/phone_register.dart';
+import 'firebase_auth_methods.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   SignupPage({super.key});
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
 
-  final usernameController = TextEditingController();
+class _SignupPageState extends State<SignupPage> {
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPassword = TextEditingController();
+  bool user = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPassword.dispose();
+    super.dispose();
+  }
+
+  void signUpUser() async {
+    if (emailController.text == "") {
+      showErrorSnackBar(context, 'Email is required!');
+    } else if (passwordController.text.trim() == "") {
+      showErrorSnackBar(context, 'Password is required!');
+    } else if (confirmPassword.text.trim() == "") {
+      showErrorSnackBar(context, 'Confirm Password is Empty!');
+    } else if (passwordController.text.trim() != confirmPassword.text.trim()) {
+      showErrorSnackBar(context, 'Password not Matched!');
+    } else {
+      await FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          context: context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,30 +67,28 @@ class SignupPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 MyTextField(
-                  controller: usernameController,
-                  hintText: "Username",
+                  controller: emailController,
+                  hintText: "Email",
                   obscureText: false,
+                  inputType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
                   controller: passwordController,
                   hintText: "Password",
                   obscureText: true,
+                  inputType: TextInputType.text,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
-                  controller: passwordController,
+                  controller: confirmPassword,
                   hintText: "Confirm Password",
                   obscureText: false,
+                  inputType: TextInputType.text,
                 ),
                 const SizedBox(height: 30),
                 MyButton(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PhoneRegister()));
-                  },
+                  onTap: signUpUser,
                   title: 'Sign up',
                 ),
                 const SizedBox(height: 20),
@@ -92,20 +125,28 @@ class SignupPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SquareTile(
-                        imagePath: 'assets/images/google.png',
-                        signInMethod: () {}),
+                      imagePath: 'assets/images/google.png',
+                    ),
                     SizedBox(
                       width: 25,
                     ),
                     SquareTile(
-                        imagePath: 'assets/images/facebook.png',
-                        signInMethod: () {}),
+                      imagePath: 'assets/images/facebook.png',
+                    ),
                     SizedBox(
                       width: 25,
                     ),
-                    SquareTile(
+                    GestureDetector(
+                      child: SquareTile(
                         imagePath: 'assets/images/phone.png',
-                        signInMethod: () {}),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PhoneRegister()));
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -122,12 +163,20 @@ class SignupPage extends StatelessWidget {
                     SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      'Sign in',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
+                    GestureDetector(
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                        ),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      },
                     ),
                   ],
                 ),

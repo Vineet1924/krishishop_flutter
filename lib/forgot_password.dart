@@ -32,9 +32,11 @@ class ForgotPassword extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 MyTextField(
-                    controller: TextEditingController(),
-                    hintText: 'Email',
-                    obscureText: false),
+                  controller: TextEditingController(),
+                  hintText: 'Email',
+                  obscureText: false,
+                  inputType: TextInputType.emailAddress,
+                ),
                 const SizedBox(height: 30),
                 MyButton(
                     onTap: () {
