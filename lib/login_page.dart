@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
@@ -29,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void signInUser() async {
+    await EasyLoading.show(status: 'Loging in...');
     if (emailController.text.trim() == "") {
       showErrorSnackBar(context, 'Email is required!');
     } else if (passwordController.text.trim() == "") {
