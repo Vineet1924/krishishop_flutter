@@ -1,17 +1,45 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
-import 'package:krishishop/dasboard.dart';
+import 'package:krishishop/firebase_auth_methods.dart';
 import 'package:krishishop/forgot_password.dart';
 import 'package:krishishop/phone_register.dart';
 import 'package:krishishop/signup_page.dart';
 
-class LoginPage extends StatelessWidget {
+import 'components/my_snackbar.dart';
+
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void signInUser() async {
+    if (emailController.text.trim() == "") {
+      showErrorSnackBar(context, 'Email is required!');
+    } else if (passwordController.text.trim() == "") {
+      showErrorSnackBar(context, 'Password is required!');
+    } else {
+      FirebaseAuthMethods(FirebaseAuth.instance).signInWithEmail(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          context: context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +63,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 MyTextField(
-                  controller: usernameController,
+                  controller: emailController,
                   hintText: "Email",
                   obscureText: false,
                   inputType: TextInputType.emailAddress,
@@ -70,10 +98,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 MyButton(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Dashboard()));
-                  },
+                  onTap: signInUser,
                   title: 'Sign in',
                 ),
                 const SizedBox(height: 20),

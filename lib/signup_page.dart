@@ -29,7 +29,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void signUpUser() async {
-    if (emailController.text == "") {
+    if (emailController.text.trim() == "") {
       showErrorSnackBar(context, 'Email is required!');
     } else if (passwordController.text.trim() == "") {
       showErrorSnackBar(context, 'Password is required!');

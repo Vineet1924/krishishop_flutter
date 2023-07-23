@@ -19,14 +19,6 @@ class FirebaseAuthMethods {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        await Timer(Duration(seconds: 5), () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Center(child: CircularProgressIndicator());
-              });
-        });
-
         await Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Dashboard()));
       });
@@ -40,6 +32,36 @@ class FirebaseAuthMethods {
           break;
         case 'email-already-in-use':
           showErrorSnackBar(context, 'email is already registerd!');
+          break;
+      }
+    }
+  }
+
+  Future<void> signInWithEmail(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    try {
+      await auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) async {
+        await Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Dashboard()));
+      });
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'wrong-password':
+          showErrorSnackBar(context, 'Password may be Incorrect!');
+          break;
+        case 'user-not-found':
+          showErrorSnackBar(context, 'Email may be Incorrect!');
+          break;
+        case 'too-many-requests':
+          showErrorSnackBar(
+              context, 'Too many Wrong attempts! Try again latter');
+          break;
+        case 'invalid-email':
+          showErrorSnackBar(context, 'Invalid email format!');
           break;
       }
     }
