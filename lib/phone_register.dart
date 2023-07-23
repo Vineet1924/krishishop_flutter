@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/phone_verification.dart';
 
-class PhoneRegister extends StatelessWidget {
+class PhoneRegister extends StatefulWidget {
   const PhoneRegister({super.key});
 
   @override
+  State<PhoneRegister> createState() => _PhoneRegisterState();
+}
+
+class _PhoneRegisterState extends State<PhoneRegister> {
+  final TextEditingController phoneController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    phoneController.selection = TextSelection.fromPosition(TextPosition(
+      offset: phoneController.text.length,
+    ));
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -62,12 +72,29 @@ class PhoneRegister extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: TextField(
-                            controller:
-                                TextEditingController(text: '9327289321'),
+                            controller: phoneController,
+                            onChanged: (value) {
+                              setState(() {
+                                phoneController.text = value;
+                              });
+                            },
                             decoration: InputDecoration(
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                suffixIcon: phoneController.text.length > 9
+                                    ? Container(
+                                        height: 20,
+                                        width: 20,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.green),
+                                        child: Icon(
+                                          Icons.done,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      )
+                                    : null),
                             style: TextStyle(
                                 fontSize: 24, color: Colors.grey[600]),
                             keyboardType: TextInputType.number,
