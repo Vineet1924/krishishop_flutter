@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_snackbar.dart';
+import 'package:krishishop/login_page.dart';
 import 'dasboard.dart';
 
 class FirebaseAuthMethods {
@@ -46,6 +47,7 @@ class FirebaseAuthMethods {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
+        await EasyLoading.dismiss();
         await Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Dashboard()));
       });
@@ -65,6 +67,17 @@ class FirebaseAuthMethods {
           showErrorSnackBar(context, 'Invalid email format!');
           break;
       }
+    }
+  }
+
+  Future<void> logOut({required BuildContext context}) async {
+    try {
+      auth.signOut().then((value) async {
+        await Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      });
+    } on FirebaseAuthException catch (e) {
+      showErrorSnackBar(context, e.code);
     }
   }
 }

@@ -1,8 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:krishishop/signup_page.dart';
+import 'dart:async';
 
-class Dashboard extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:krishishop/firebase_auth_methods.dart';
+
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  Future signOut() async {
+    await EasyLoading.show(status: 'Loging out...');
+    await FirebaseAuthMethods(FirebaseAuth.instance).logOut(context: context);
+    await EasyLoading.dismiss();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,13 +25,9 @@ class Dashboard extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignupPage()));
-                  },
-                  child: Text('Signup'))
+              ElevatedButton(onPressed: signOut, child: Text('Logout'))
             ],
           ),
         ),

@@ -29,14 +29,14 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void signInUser() async {
-    await EasyLoading.show(status: 'Loging in...');
+  Future signInUser() async {
     if (emailController.text.trim() == "") {
       showErrorSnackBar(context, 'Email is required!');
     } else if (passwordController.text.trim() == "") {
       showErrorSnackBar(context, 'Password is required!');
     } else {
-      FirebaseAuthMethods(FirebaseAuth.instance).signInWithEmail(
+      await EasyLoading.show(status: 'Loging in');
+      await FirebaseAuthMethods(FirebaseAuth.instance).signInWithEmail(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
           context: context);
