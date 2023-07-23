@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_snackbar.dart';
 import 'package:krishishop/components/my_textfield.dart';
@@ -28,7 +29,8 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  void signUpUser() async {
+  Future signUpUser() async {
+    await EasyLoading.show(status: 'Creating your Account!');
     if (emailController.text.trim() == "") {
       showErrorSnackBar(context, 'Email is required!');
     } else if (passwordController.text.trim() == "") {
@@ -43,6 +45,7 @@ class _SignupPageState extends State<SignupPage> {
           password: passwordController.text.trim(),
           context: context);
     }
+    await EasyLoading.dismiss();
   }
 
   @override

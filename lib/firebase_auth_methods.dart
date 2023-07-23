@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_snackbar.dart';
-
 import 'dasboard.dart';
 
 class FirebaseAuthMethods {
@@ -19,9 +18,11 @@ class FirebaseAuthMethods {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
+        await EasyLoading.showSuccess('Account Created!');
         await Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Dashboard()));
       });
+      EasyLoading.dismiss();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'invalid-email':
