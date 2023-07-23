@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "206526653884-1h2l516203vpi6ggf185ltsi5pl0lkcc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.krishishop",
+            "certificate_hash": "7311744f27735f664b4323f3bda6b1a198b6b935"
+          }
+        },
+        {
           "client_id": "206526653884-shbvv3q0pbk739gs0lvh4g7ko9n9eim5.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "206526653884-shbvv3q0pbk739gs0lvh4g7ko9n9eim5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "206526653884-5u1b27alcc1g5npa7fruehni0u1o671e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.krishishop.RunnerTests"
+              }
             }
           ]
         }
