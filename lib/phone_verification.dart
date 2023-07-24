@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:krishishop/components/OTP_box.dart';
 import 'package:krishishop/forgot_password.dart';
 import 'package:pinput/pinput.dart';
 import 'components/my_button.dart';
