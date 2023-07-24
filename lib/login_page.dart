@@ -1,14 +1,47 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
+import 'package:krishishop/firebase_auth_methods.dart';
+import 'package:krishishop/forgot_password.dart';
+import 'package:krishishop/phone_register.dart';
 import 'package:krishishop/signup_page.dart';
 
-class LoginPage extends StatelessWidget {
+import 'components/my_snackbar.dart';
+
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future signInUser() async {
+    if (emailController.text.trim() == "") {
+      showErrorSnackBar(context, 'Email is required!');
+    } else if (passwordController.text.trim() == "") {
+      showErrorSnackBar(context, 'Password is required!');
+    } else {
+      await EasyLoading.show(status: 'Loging in');
+      await FirebaseAuthMethods(FirebaseAuth.instance).signInWithEmail(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          context: context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +65,17 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 MyTextField(
-                  controller: usernameController,
-                  hintText: "Username",
+                  controller: emailController,
+                  hintText: "Email",
                   obscureText: false,
+                  inputType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
                   controller: passwordController,
                   hintText: "Password",
                   obscureText: true,
+                  inputType: TextInputType.text,
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -48,19 +83,24 @@ class LoginPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Forgot Password!',
-                        style: TextStyle(color: Colors.grey[600]),
+                      GestureDetector(
+                        child: Text(
+                          'Forgot Password!',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPassword()));
+                        },
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 30),
                 MyButton(
-                  onTap: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => SignupPage()));
-                  },
+                  onTap: signInUser,
                   title: 'Sign in',
                 ),
                 const SizedBox(height: 20),
@@ -97,20 +137,28 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SquareTile(
-                        imagePath: 'assets/images/google.png',
-                        signInMethod: () {}),
+                      imagePath: 'assets/images/google.png',
+                    ),
                     SizedBox(
                       width: 25,
                     ),
                     SquareTile(
-                        imagePath: 'assets/images/facebook.png',
-                        signInMethod: () {}),
+                      imagePath: 'assets/images/facebook.png',
+                    ),
                     SizedBox(
                       width: 25,
                     ),
-                    SquareTile(
+                    GestureDetector(
+                      child: SquareTile(
                         imagePath: 'assets/images/phone.png',
-                        signInMethod: () {}),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PhoneRegister()));
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -127,12 +175,20 @@ class LoginPage extends StatelessWidget {
                     SizedBox(
                       width: 4,
                     ),
-                    Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
+                    GestureDetector(
+                      child: Text(
+                        'Register now',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                        ),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupPage()));
+                      },
                     ),
                   ],
                 ),

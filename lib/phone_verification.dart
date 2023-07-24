@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:krishishop/components/OTP_box.dart';
+import 'package:krishishop/forgot_password.dart';
+import 'package:pinput/pinput.dart';
 import 'components/my_button.dart';
-import 'login_page.dart';
 
 class PhoneVerification extends StatelessWidget {
   const PhoneVerification({super.key});
@@ -31,21 +32,15 @@ class PhoneVerification extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[600], fontSize: 16),
                 ),
                 const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OtpField(),
-                    const SizedBox(width: 1),
-                    OtpField(),
-                    const SizedBox(width: 1),
-                    OtpField(),
-                    const SizedBox(width: 1),
-                    OtpField(),
-                    const SizedBox(width: 1),
-                    OtpField(),
-                    const SizedBox(width: 1),
-                    OtpField(),
-                  ],
+                Pinput(
+                  length: 6,
+                  showCursor: true,
+                  defaultPinTheme: PinTheme(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey.shade700))),
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -63,8 +58,10 @@ class PhoneVerification extends StatelessWidget {
                 const SizedBox(height: 30),
                 MyButton(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPassword()));
                     },
                     title: 'Verify'),
               ],

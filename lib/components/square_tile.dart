@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class SquareTile extends StatelessWidget {
   final String imagePath;
-  final Function? signInMethod;
 
-  const SquareTile(
-      {super.key, required this.imagePath, required this.signInMethod});
+  const SquareTile({
+    super.key,
+    required this.imagePath,
+  });
 
   @override
   Widget build(BuildContext context) {

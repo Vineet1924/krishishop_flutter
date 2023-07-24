@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '206526653884',
     projectId: 'krishishop-c1de8',
     storageBucket: 'krishishop-c1de8.appspot.com',
-    iosClientId: '206526653884-hh2f6dvi8h9uk9lrnq3l1q0ffsui7dqo.apps.googleusercontent.com',
+    iosClientId:
+        '206526653884-hh2f6dvi8h9uk9lrnq3l1q0ffsui7dqo.apps.googleusercontent.com',
     iosBundleId: 'com.example.krishishop',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '206526653884',
     projectId: 'krishishop-c1de8',
     storageBucket: 'krishishop-c1de8.appspot.com',
-    iosClientId: '206526653884-5u1b27alcc1g5npa7fruehni0u1o671e.apps.googleusercontent.com',
+    iosClientId:
+        '206526653884-5u1b27alcc1g5npa7fruehni0u1o671e.apps.googleusercontent.com',
     iosBundleId: 'com.example.krishishop.RunnerTests',
   );
 }

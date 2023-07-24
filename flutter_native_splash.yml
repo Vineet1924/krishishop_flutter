@@ -1,0 +1,11 @@
+flutter_native_splash:
+ color: “#ffffff”
+ image: assets/icons/app_logo.png
+ android: true
+ ios: true
+ web: false
+ android_gravity: fill
+ ios_content_mode: scaleAspectFill
+ color_dark: “#ffffff”
+ image_dark: assets/applogo.png
+ fullscreen: true
