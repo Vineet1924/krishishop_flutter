@@ -19,7 +19,7 @@ class PhoneVerification extends StatelessWidget {
                 Icon(
                   Icons.lock,
                   size: 120,
-                  color: Colors.black,
+                  color: Colors.blue,
                 ),
                 const SizedBox(height: 50),
                 Text(
