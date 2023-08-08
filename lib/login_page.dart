@@ -4,9 +4,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
+import 'package:krishishop/dasboard.dart';
 import 'package:krishishop/firebase_auth_methods.dart';
 import 'package:krishishop/forgot_password.dart';
-import 'package:krishishop/phone_register.dart';
 import 'package:krishishop/signup_page.dart';
 
 import 'components/my_snackbar.dart';
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future signInUser() async {
+  Future<void> signInUser() async {
     if (emailController.text.trim() == "") {
       showErrorSnackBar(context, 'Email is required!');
     } else if (passwordController.text.trim() == "") {
@@ -41,6 +41,12 @@ class _LoginPageState extends State<LoginPage> {
           password: passwordController.text.trim(),
           context: context);
     }
+  }
+
+  Future<void> signInWithGoogle() async {
+    await FirebaseAuthMethods(FirebaseAuth.instance).signInWithGoogle(context);
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
   }
 
   @override
@@ -136,8 +142,13 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile(
-                      imagePath: 'assets/images/google.png',
+                    GestureDetector(
+                      child: SquareTile(
+                        imagePath: 'assets/images/google.png',
+                      ),
+                      onTap: () async {
+                        signInWithGoogle();
+                      },
                     ),
                     SizedBox(
                       width: 25,
@@ -147,17 +158,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(
                       width: 25,
-                    ),
-                    GestureDetector(
-                      child: SquareTile(
-                        imagePath: 'assets/images/phone.png',
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PhoneRegister()));
-                      },
                     ),
                   ],
                 ),
@@ -200,3 +200,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+
+
+

@@ -6,7 +6,6 @@ import 'package:krishishop/components/my_snackbar.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
 import 'package:krishishop/login_page.dart';
-import 'package:krishishop/phone_register.dart';
 import 'firebase_auth_methods.dart';
 
 class SignupPage extends StatefulWidget {
@@ -138,17 +137,6 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     SizedBox(
                       width: 25,
-                    ),
-                    GestureDetector(
-                      child: SquareTile(
-                        imagePath: 'assets/images/phone.png',
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PhoneRegister()));
-                      },
                     ),
                   ],
                 ),
