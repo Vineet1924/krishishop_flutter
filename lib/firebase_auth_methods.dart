@@ -72,6 +72,7 @@ class FirebaseAuthMethods {
   }
 
 signInWithGoogle(BuildContext context) async {
+    await EasyLoading.show(status: 'Loging in');
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
@@ -80,9 +81,10 @@ signInWithGoogle(BuildContext context) async {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-  
+    
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+  
   Future<void> logOut({required BuildContext context}) async {
     try {
       auth.signOut().then((value) async {

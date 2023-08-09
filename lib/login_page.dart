@@ -35,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
     } else if (passwordController.text.trim() == "") {
       showErrorSnackBar(context, 'Password is required!');
     } else {
-      await EasyLoading.show(status: 'Loging in');
       await FirebaseAuthMethods(FirebaseAuth.instance).signInWithEmail(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
@@ -46,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signInWithGoogle() async {
     await FirebaseAuthMethods(FirebaseAuth.instance).signInWithGoogle(context);
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+    await EasyLoading.dismiss();
   }
 
   @override

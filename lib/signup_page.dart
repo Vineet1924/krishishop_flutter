@@ -5,6 +5,7 @@ import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_snackbar.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
+import 'package:krishishop/dasboard.dart';
 import 'package:krishishop/login_page.dart';
 import 'firebase_auth_methods.dart';
 
@@ -47,6 +48,13 @@ class _SignupPageState extends State<SignupPage> {
     await EasyLoading.dismiss();
   }
 
+  Future<void> signInWithGoogle() async {
+    await FirebaseAuthMethods(FirebaseAuth.instance).signInWithGoogle(context);
+
+    Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
+    await EasyLoading.dismiss();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,8 +134,13 @@ class _SignupPageState extends State<SignupPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SquareTile(
-                      imagePath: 'assets/images/google.png',
+                    GestureDetector(
+                      child: SquareTile(
+                        imagePath: 'assets/images/google.png',
+                      ),
+                      onTap: () {
+                        signInWithGoogle();
+                      },
                     ),
                     SizedBox(
                       width: 25,
