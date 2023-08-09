@@ -1,10 +1,10 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:krishishop/home_screen.dart';
+import 'package:krishishop/profile_screen.dart';
+import 'package:krishishop/search_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:krishishop/firebase_auth_methods.dart';
+
+import 'cart_screen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -14,62 +14,62 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  Future signOut() async {
-    await EasyLoading.show(status: 'Loging out...');
-    await FirebaseAuthMethods(FirebaseAuth.instance).logOut(context: context);
-    await EasyLoading.dismiss();
-  }
+  int currentIndex = 0;
+  static const List<Widget> screens = <Widget>[
+    home(),
+    searchScreen(),
+    cartScreen(),
+    profileScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Center(
-            child: Text(
-          "Krishishop",
-          style: TextStyle(color: Colors.white),
-        )),
+      body: Center(
+        child: screens.elementAt(currentIndex),
       ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: signOut, child: Text('Logout'))
-            ],
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(16),
           ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.black,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: GNav(
-            backgroundColor: Colors.black,
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade800,
-            gap: 8,
-            padding: EdgeInsets.all(16),
-            tabs: [
-              GButton(
-                icon: Icons.home_outlined,
-                text: "Home",
-              ),
-              GButton(
-                icon: Icons.search,
-                text: "Search",
-              ),
-              GButton(
-                icon: Icons.shopping_cart_outlined,
-                text: "Cart",
-              ),
-              GButton(
-                icon: Icons.settings,
-                text: "Settings",
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: GNav(
+              backgroundColor: Colors.black,
+              color: Colors.white,
+              activeColor: Colors.white,
+              tabBackgroundColor: Colors.grey.shade800,
+              gap: 8,
+              padding: EdgeInsets.all(16),
+              tabs: [
+                GButton(
+                  icon: Icons.home_outlined,
+                  text: "Home",
+                ),
+                GButton(
+                  icon: Icons.search,
+                  text: "Search",
+                ),
+                GButton(
+                  icon: Icons.shopping_cart_outlined,
+                  text: "Cart",
+                ),
+                GButton(
+                  icon: Icons.person,
+                  text: "Profile",
+                ),
+              ],
+              selectedIndex: currentIndex,
+              onTabChange: (index) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+            ),
           ),
         ),
       ),
