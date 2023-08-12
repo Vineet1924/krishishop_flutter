@@ -5,7 +5,7 @@ import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
 import 'package:krishishop/dasboard.dart';
-import 'package:krishishop/firebase_auth_methods.dart';
+import 'package:krishishop/firebase_services/firebase_auth_methods.dart';
 import 'package:krishishop/forgot_password.dart';
 import 'package:krishishop/signup_page.dart';
 

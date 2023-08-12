@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:krishishop/components/my_snackbar.dart';
+import 'package:krishishop/firebase_services/firestore_methods.dart';
 import 'package:krishishop/login_page.dart';
-import 'dasboard.dart';
+import '../dasboard.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth auth;
@@ -21,6 +22,7 @@ class FirebaseAuthMethods {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         await EasyLoading.showSuccess('Account Created!');
+        addUid(auth.currentUser!.uid.toString());
         await Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Dashboard()));
       });
@@ -71,7 +73,7 @@ class FirebaseAuthMethods {
     }
   }
 
-signInWithGoogle(BuildContext context) async {
+  signInWithGoogle(BuildContext context) async {
     await EasyLoading.show(status: 'Loging in');
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
@@ -81,10 +83,14 @@ signInWithGoogle(BuildContext context) async {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    
+
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    print(user.user?.displayName.toString());
+    addUid(auth.currentUser!.uid.toString());
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
-  
+
   Future<void> logOut({required BuildContext context}) async {
     try {
       auth.signOut().then((value) async {

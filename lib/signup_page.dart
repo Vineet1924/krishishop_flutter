@@ -7,7 +7,7 @@ import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/components/square_tile.dart';
 import 'package:krishishop/dasboard.dart';
 import 'package:krishishop/login_page.dart';
-import 'firebase_auth_methods.dart';
+import 'firebase_services/firebase_auth_methods.dart';
 
 class SignupPage extends StatefulWidget {
   SignupPage({super.key});
