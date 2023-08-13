@@ -21,6 +21,7 @@ class _DashboardState extends State<Dashboard> {
     cartScreen(),
     profileScreen()
   ];
+  var pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class _DashboardState extends State<Dashboard> {
             currentIndex = index;
           });
         },
+        controller: pageController,
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -72,6 +74,9 @@ class _DashboardState extends State<Dashboard> {
               onTabChange: (index) {
                 setState(() {
                   currentIndex = index;
+                  pageController.animateToPage(currentIndex,
+                      duration: Duration(microseconds: 200),
+                      curve: Curves.linear);
                 });
               },
             ),
