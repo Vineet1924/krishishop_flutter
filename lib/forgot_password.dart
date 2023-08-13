@@ -5,6 +5,7 @@ import 'components/my_button.dart';
 
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({super.key});
+  final bool isEditable = true;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class ForgotPassword extends StatelessWidget {
                   hintText: 'Email',
                   obscureText: false,
                   inputType: TextInputType.emailAddress,
+                  isEditable: isEditable,
                 ),
                 const SizedBox(height: 30),
                 MyButton(

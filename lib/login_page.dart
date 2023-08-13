@@ -21,6 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final bool isEditable = true;
 
   @override
   void dispose() {
@@ -45,7 +46,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signInWithGoogle() async {
     await FirebaseAuthMethods(FirebaseAuth.instance).signInWithGoogle(context);
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Dashboard()));
     await EasyLoading.dismiss();
   }
 
@@ -75,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "Email",
                   obscureText: false,
                   inputType: TextInputType.emailAddress,
+                  isEditable: isEditable,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
@@ -82,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "Password",
                   obscureText: true,
                   inputType: TextInputType.text,
+                  isEditable: isEditable,
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -200,7 +204,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-
-
-

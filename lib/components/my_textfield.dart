@@ -5,14 +5,15 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final TextInputType inputType;
+  final bool isEditable;
 
-  const MyTextField({
-    super.key,
-    required this.controller,
-    required this.hintText,
-    required this.obscureText,
-    required this.inputType,
-  });
+  const MyTextField(
+      {super.key,
+      required this.controller,
+      required this.hintText,
+      required this.obscureText,
+      required this.inputType,
+      required this.isEditable});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,8 @@ class MyTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
+          disabledBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
           enabledBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
           focusedBorder: OutlineInputBorder(
@@ -28,6 +31,7 @@ class MyTextField extends StatelessWidget {
           fillColor: Colors.grey.shade200,
           filled: true,
           hintText: hintText,
+          enabled: isEditable,
         ),
         obscureText: obscureText,
         keyboardType: inputType,

@@ -20,6 +20,7 @@ class _SignupPageState extends State<SignupPage> {
   final passwordController = TextEditingController();
   final confirmPassword = TextEditingController();
   bool user = false;
+  final bool isEditable = true;
 
   @override
   void dispose() {
@@ -52,9 +53,10 @@ class _SignupPageState extends State<SignupPage> {
     await FirebaseAuthMethods(FirebaseAuth.instance).signInWithGoogle(context);
 
     Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+        context, MaterialPageRoute(builder: (context) => Dashboard()));
     await EasyLoading.dismiss();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +83,7 @@ class _SignupPageState extends State<SignupPage> {
                   hintText: "Email",
                   obscureText: false,
                   inputType: TextInputType.emailAddress,
+                  isEditable: isEditable,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
@@ -88,6 +91,7 @@ class _SignupPageState extends State<SignupPage> {
                   hintText: "Password",
                   obscureText: true,
                   inputType: TextInputType.text,
+                  isEditable: isEditable,
                 ),
                 const SizedBox(height: 20),
                 MyTextField(
@@ -95,6 +99,7 @@ class _SignupPageState extends State<SignupPage> {
                   hintText: "Confirm Password",
                   obscureText: false,
                   inputType: TextInputType.text,
+                  isEditable: isEditable,
                 ),
                 const SizedBox(height: 30),
                 MyButton(

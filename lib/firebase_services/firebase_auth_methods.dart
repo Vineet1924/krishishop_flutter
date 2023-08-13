@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:krishishop/components/my_snackbar.dart';
-import 'package:krishishop/firebase_services/firestore_methods.dart';
 import 'package:krishishop/login_page.dart';
 import '../dasboard.dart';
 
@@ -22,7 +22,15 @@ class FirebaseAuthMethods {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         await EasyLoading.showSuccess('Account Created!');
-        addUid(auth.currentUser!.uid.toString());
+
+        var firebaseUser = await auth.currentUser!;
+        var uid = firebaseUser.uid;
+        final userData = {"uid": uid, "email": email};
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(uid)
+            .set(userData);
+
         await Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Dashboard()));
       });
@@ -47,6 +55,7 @@ class FirebaseAuthMethods {
       required String password,
       required BuildContext context}) async {
     try {
+      EasyLoading.show(status: "Signing in...");
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
@@ -84,10 +93,18 @@ class FirebaseAuthMethods {
       idToken: googleAuth?.idToken,
     );
 
-    UserCredential user =
+    UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    print(user.user?.displayName.toString());
-    addUid(auth.currentUser!.uid.toString());
+    final user = await authResult.user;
+    var firebaseUser = await auth.currentUser!;
+
+    var uid = firebaseUser.uid;
+    final userData = {"uid": uid, "email": user?.email};
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(uid)
+        .set(userData, SetOptions(merge: true));
+
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
