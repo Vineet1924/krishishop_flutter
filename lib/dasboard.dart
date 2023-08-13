@@ -25,8 +25,13 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: screens.elementAt(currentIndex),
+      body: PageView(
+        children: screens,
+        onPageChanged: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15.0),

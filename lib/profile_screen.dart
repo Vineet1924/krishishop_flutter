@@ -105,7 +105,7 @@ class _profileScreenState extends State<profileScreen> {
                       controller: phoneCupertino,
                       hintText: "Phone",
                       obscureText: false,
-                      inputType: TextInputType.text,
+                      inputType: TextInputType.phone,
                       isEditable: true),
                 ],
               ),
@@ -154,7 +154,66 @@ class _profileScreenState extends State<profileScreen> {
             ));
   }
 
-  Future<void> addImage(String imageLink) async {
+  void showCupertinoImage(BuildContext context) {
+    showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+              title: Text("Choose"),
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          child: iconTile(icon: Icon(Icons.camera_alt)),
+                          onTap: () async {
+                            ImagePicker imagePicker = ImagePicker();
+                            XFile? image = await imagePicker.pickImage(
+                                source: ImageSource.camera);
+
+                            if (image == null) {
+                              showErrorSnackBar(context, "No image selected");
+                            } else {
+                              print("${image.path}");
+                              print("${image.name}");
+                              addImageInStorage(image);
+                            }
+                          }),
+                      const SizedBox(width: 30),
+                      GestureDetector(
+                        child: iconTile(icon: Icon(Icons.file_upload_outlined)),
+                        onTap: () async {
+                          ImagePicker imagePicker = ImagePicker();
+                          XFile? image = await imagePicker.pickImage(
+                              source: ImageSource.gallery);
+
+                          if (image == null) {
+                            showErrorSnackBar(context, "No image selected");
+                          } else {
+                            print("${image.path}");
+                            print("${image.name}");
+                            addImageInStorage(image);
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Close"),
+                )
+              ],
+            ));
+  }
+
+  Future<void> addImageInCollection(String imageLink) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("Users");
     try {
@@ -167,6 +226,27 @@ class _profileScreenState extends State<profileScreen> {
           .set(profilepicMap, SetOptions(merge: true));
     } catch (e) {
       print("Error while storing data: $e");
+    }
+  }
+
+  Future<void> addImageInStorage(XFile? image) async {
+    Reference root = FirebaseStorage.instance.ref();
+    Reference profile = root.child("profile");
+    Reference imageToUpload = profile.child("${image!.name}");
+    try {
+      EasyLoading.show(status: "Uploading");
+      await imageToUpload.putFile(File(image.path));
+      EasyLoading.showSuccess("Uploaded");
+      imageLink = await imageToUpload.getDownloadURL();
+      await addImageInCollection(imageLink);
+      EasyLoading.dismiss();
+      Navigator.of(context).pop();
+
+      setState(() {
+        loadUser();
+      });
+    } on Exception catch (e) {
+      showErrorSnackBar(context, "Error while uploading ${e}");
     }
   }
 
@@ -219,34 +299,35 @@ class _profileScreenState extends State<profileScreen> {
                           ],
                         ),
                         onTap: () async {
-                          ImagePicker imagePicker = ImagePicker();
-                          XFile? image = await imagePicker.pickImage(
-                              source: ImageSource.gallery);
+                          showCupertinoImage(context);
+                          // ImagePicker imagePicker = ImagePicker();
+                          // XFile? image = await imagePicker.pickImage(
+                          //     source: ImageSource.gallery);
 
-                          if (image == null) {
-                            showErrorSnackBar(context, "No image selected");
-                          } else {
-                            print("${image.path}");
-                            print("${image.name}");
+                          // if (image == null) {
+                          //   showErrorSnackBar(context, "No image selected");
+                          // } else {
+                          //   print("${image.path}");
+                          //   print("${image.name}");
 
-                            Reference root = FirebaseStorage.instance.ref();
-                            Reference profile = root.child('profile');
-                            Reference imageToUpload =
-                                profile.child('${image.name}');
-                            try {
-                              EasyLoading.show(status: "Uploading");
-                              await imageToUpload.putFile(File(image.path));
-                              EasyLoading.showSuccess("Uploaded");
-                              imageLink = await imageToUpload.getDownloadURL();
-                              await addImage(imageLink);
-                              EasyLoading.dismiss();
-                              setState(() {
-                                loadUser();
-                              });
-                            } on Exception catch (e) {
-                              print(e);
-                            }
-                          }
+                          //   Reference root = FirebaseStorage.instance.ref();
+                          //   Reference profile = root.child('profile');
+                          //   Reference imageToUpload =
+                          //       profile.child('${image.name}');
+                          //   try {
+                          //     EasyLoading.show(status: "Uploading");
+                          //     await imageToUpload.putFile(File(image.path));
+                          //     EasyLoading.showSuccess("Uploaded");
+                          //     imageLink = await imageToUpload.getDownloadURL();
+                          //     await addImage(imageLink);
+                          //     EasyLoading.dismiss();
+                          //     setState(() {
+                          //       loadUser();
+                          //     });
+                          //   } on Exception catch (e) {
+                          //     print(e);
+                          //   }
+                          // }
                         },
                       ),
                     ),
