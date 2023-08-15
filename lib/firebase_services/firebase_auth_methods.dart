@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:krishishop/components/my_snackbar.dart';
 import 'package:krishishop/login_page.dart';
 import '../dasboard.dart';
+import '../models/user.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth auth;
@@ -60,8 +61,26 @@ class FirebaseAuthMethods {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         await EasyLoading.dismiss();
-        await Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Dashboard()));
+
+        userModel? loadUser = await userModel
+            .loadFromFirestore(FirebaseAuth.instance.currentUser!.uid);
+        String? usertype = loadUser?.usertype;
+        print(usertype);
+        if (usertype == "admin") {
+          showErrorSnackBar(context, "You can't login with admin account");
+
+          try {
+            auth.signOut().then((value) async {
+              await Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LoginPage()));
+            });
+          } on FirebaseAuthException catch (e) {
+            showErrorSnackBar(context, e.code);
+          }
+        } else {
+          await Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Dashboard()));
+        }
       });
     } on FirebaseAuthException catch (e) {
       switch (e.code) {

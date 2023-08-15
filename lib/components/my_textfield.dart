@@ -35,6 +35,7 @@ class MyTextField extends StatelessWidget {
         ),
         obscureText: obscureText,
         keyboardType: inputType,
+        style: TextStyle(color: Colors.grey.shade700),
       ),
     );
   }

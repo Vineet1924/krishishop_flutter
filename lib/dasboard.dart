@@ -26,63 +26,66 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        children: screens,
-        onPageChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        controller: pageController,
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.black,
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: GNav(
-              backgroundColor: Colors.black,
-              color: Colors.white,
-              activeColor: Colors.white,
-              tabBackgroundColor: Colors.grey.shade800,
-              gap: 8,
-              padding: EdgeInsets.all(16),
-              tabs: [
-                GButton(
-                  icon: Icons.home_outlined,
-                  text: "Home",
-                ),
-                GButton(
-                  icon: Icons.search,
-                  text: "Search",
-                ),
-                GButton(
-                  icon: Icons.shopping_cart_outlined,
-                  text: "Cart",
-                ),
-                GButton(
-                  icon: Icons.person,
-                  text: "Profile",
-                ),
-              ],
-              selectedIndex: currentIndex,
-              onTabChange: (index) {
-                setState(() {
-                  currentIndex = index;
-                  pageController.animateToPage(currentIndex,
-                      duration: Duration(microseconds: 200),
-                      curve: Curves.linear);
-                });
-              },
+      body: Stack(children: [
+        PageView(
+          children: screens,
+          onPageChanged: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+          controller: pageController,
+        ),
+      ]),
+      bottomNavigationBar: Stack(children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              border: Border.all(color: Colors.black),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: GNav(
+                backgroundColor: Colors.black,
+                color: Colors.white,
+                activeColor: Colors.white,
+                tabBackgroundColor: Colors.grey.shade800,
+                gap: 8,
+                padding: EdgeInsets.all(16),
+                tabs: [
+                  GButton(
+                    icon: Icons.apps,
+                    text: "Home",
+                  ),
+                  GButton(
+                    icon: Icons.search,
+                    text: "Search",
+                  ),
+                  GButton(
+                    icon: Icons.shopping_cart_outlined,
+                    text: "Cart",
+                  ),
+                  GButton(
+                    icon: Icons.person,
+                    text: "Profile",
+                  ),
+                ],
+                selectedIndex: currentIndex,
+                onTabChange: (index) {
+                  setState(() {
+                    currentIndex = index;
+                    pageController.animateToPage(currentIndex,
+                        duration: Duration(microseconds: 200),
+                        curve: Curves.linear);
+                  });
+                },
+              ),
             ),
           ),
         ),
-      ),
+      ]),
     );
   }
 }

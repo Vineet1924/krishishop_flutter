@@ -127,7 +127,8 @@ class _profileScreenState extends State<profileScreen> {
                         phone: phone,
                         profilepic: imageLink,
                         uid: uid,
-                        username: username);
+                        username: username,
+                        usertype: "user");
 
                     await storeUser.storeAddress();
                     await storeUser.storeUsername();
@@ -300,34 +301,6 @@ class _profileScreenState extends State<profileScreen> {
                         ),
                         onTap: () async {
                           showCupertinoImage(context);
-                          // ImagePicker imagePicker = ImagePicker();
-                          // XFile? image = await imagePicker.pickImage(
-                          //     source: ImageSource.gallery);
-
-                          // if (image == null) {
-                          //   showErrorSnackBar(context, "No image selected");
-                          // } else {
-                          //   print("${image.path}");
-                          //   print("${image.name}");
-
-                          //   Reference root = FirebaseStorage.instance.ref();
-                          //   Reference profile = root.child('profile');
-                          //   Reference imageToUpload =
-                          //       profile.child('${image.name}');
-                          //   try {
-                          //     EasyLoading.show(status: "Uploading");
-                          //     await imageToUpload.putFile(File(image.path));
-                          //     EasyLoading.showSuccess("Uploaded");
-                          //     imageLink = await imageToUpload.getDownloadURL();
-                          //     await addImage(imageLink);
-                          //     EasyLoading.dismiss();
-                          //     setState(() {
-                          //       loadUser();
-                          //     });
-                          //   } on Exception catch (e) {
-                          //     print(e);
-                          //   }
-                          // }
                         },
                       ),
                     ),
