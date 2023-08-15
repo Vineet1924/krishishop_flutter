@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:krishishop/components/my_card.dart';
+import 'package:krishishop/product_details.dart';
 import 'models/Products.dart';
 
 class home extends StatefulWidget {
@@ -16,7 +18,7 @@ class _homeState extends State<home> {
   @override
   void initState() {
     super.initState();
-
+    EasyLoading.show(status: "Loading");
     fetchProducts();
   }
 
@@ -38,6 +40,7 @@ class _homeState extends State<home> {
 
     setState(() {
       products = productsList;
+      EasyLoading.dismiss();
     });
   }
 
@@ -61,19 +64,30 @@ class _homeState extends State<home> {
             scrollDirection: Axis.vertical,
             itemCount: products.length,
             itemBuilder: (context, Index) {
+              final product = products[Index];
               return Container(
                 height: 350,
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: Colors.grey.shade400, width: 2)),
-                child: myCard(
-                  index: Index,
-                  name: products[Index].name,
-                  description: products[Index].description,
-                  quantity: products[Index].quantity,
-                  price: products[Index].price,
-                  image: products[Index].images[0],
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => productDetails(
+                                  product: product,
+                                )));
+                  },
+                  child: myCard(
+                    index: Index,
+                    name: products[Index].name,
+                    description: products[Index].description,
+                    quantity: products[Index].quantity,
+                    price: products[Index].price,
+                    image: products[Index].images[0],
+                  ),
                 ),
               );
             }),

@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, must_be_immutable, recursive_getters
+// ignore_for_file: camel_case_types, must_be_immutable, recursive_getters, unrelated_type_equality_checks
 import 'package:flutter/material.dart';
 
 class myCard extends StatefulWidget {
@@ -41,17 +41,23 @@ class _myCardState extends State<myCard> {
           Container(
             height: 110,
             width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.transparent,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.network(
-                  widget.image,
-                  fit: BoxFit.fill,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.network(
+                    widget.image,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 2),
@@ -76,10 +82,19 @@ class _myCardState extends State<myCard> {
           const SizedBox(height: 1),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              widget.quantity,
-              style: TextStyle(color: Colors.green.shade800, fontSize: 16),
-            ),
+            child: widget.quantity == "0"
+                ? const Text(
+                    "Out of Stock",
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                    ),
+                  )
+                : Text(
+                    widget.quantity,
+                    style: const TextStyle(
+                      color: Colors.green,
+                    ),
+                  ),
           ),
         ],
       ),
