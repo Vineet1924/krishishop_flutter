@@ -65,8 +65,8 @@ class FirebaseAuthMethods {
         userModel? loadUser = await userModel
             .loadFromFirestore(FirebaseAuth.instance.currentUser!.uid);
         String? usertype = loadUser?.usertype;
-        print(usertype);
-        if (usertype == "admin") {
+        print(loadUser?.uid);
+        if (loadUser?.uid == "" || loadUser == null) {
           showErrorSnackBar(context, "You can't login with admin account");
 
           try {

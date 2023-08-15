@@ -31,6 +31,7 @@ class _homeState extends State<home> {
   mapProducts(QuerySnapshot<Map<String, dynamic>> documents) {
     var productsList = documents.docs
         .map((products) => Products(
+            pid: products.id,
             description: products['description'],
             name: products['name'],
             quantity: products['quantity'],

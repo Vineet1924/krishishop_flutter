@@ -230,6 +230,17 @@ class _productDetailsState extends State<productDetails> {
               ],
             ),
           ),
+        ),
+        Positioned(
+          top: 785,
+          left: 178,
+          child: Container(
+            width: 50,
+            height: 6,
+            decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(100)),
+          ),
         )
       ],
     );

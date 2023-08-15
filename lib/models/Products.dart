@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 class Products {
+  String pid;
   String description;
   String name;
   String quantity;
@@ -12,9 +13,11 @@ class Products {
       required this.name,
       required this.quantity,
       required this.images,
-      required this.price});
+      required this.price,
+      required this.pid});
 
   factory Products.fromJson(Map<String, dynamic> json) => Products(
+        pid: json["pid"],
         description: json["description"],
         name: json["name"],
         quantity: json["quantity"],
@@ -23,6 +26,7 @@ class Products {
       );
 
   Map<String, dynamic> toJson() => {
+        "pid": pid,
         "description": description,
         "name": name,
         "quantity": quantity,
