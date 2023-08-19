@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'models/Products.dart';
 
@@ -14,11 +15,52 @@ class productDetails extends StatefulWidget {
 
 class _productDetailsState extends State<productDetails> {
   List<dynamic> images = [];
+  String pid = "";
   String name = "";
   String description = "";
   String quantity = "";
   String price = "";
   int selectedQuantity = 1;
+  bool animateButton = false;
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  bool isAvailable = false;
+
+  Future<bool> isFavourite() async {
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(uid)
+        .collection("Favourite")
+        .doc(pid)
+        .get()
+        .then((documentSnapshot) {
+      if (documentSnapshot.exists) {
+        setState(() {
+          isAvailable = true;
+        });
+
+        return true;
+      } else {
+        setState(() {
+          isAvailable = false;
+        });
+        return false;
+      }
+    });
+
+    return false;
+  }
+
+  void doAnimation() {
+    setState(() {
+      animateButton = true;
+    });
+
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        animateButton = false;
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -28,6 +70,8 @@ class _productDetailsState extends State<productDetails> {
     description = widget.product.description;
     quantity = widget.product.quantity;
     price = widget.product.price;
+    pid = widget.product.pid;
+    isFavourite();
   }
 
   @override
@@ -143,12 +187,42 @@ class _productDetailsState extends State<productDetails> {
           left: 320,
           child: FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 255, 165, 157),
-            onPressed: () {},
-            child: Icon(
-              Icons.favorite,
-              color: const Color.fromARGB(255, 255, 9, 58),
-              size: 35,
-            ),
+            onPressed: () async {
+              if (isAvailable) {
+                await FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(uid)
+                    .collection("Favourite")
+                    .doc(pid)
+                    .delete();
+
+                setState(() {
+                  isAvailable = false;
+                });
+              } else {
+                await FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(uid)
+                    .collection("Favourite")
+                    .doc(pid)
+                    .set({"pid": pid});
+
+                setState(() {
+                  isAvailable = true;
+                });
+              }
+            },
+            child: isAvailable
+                ? Icon(
+                    Icons.favorite,
+                    color: const Color.fromARGB(255, 255, 9, 58),
+                    size: 35,
+                  )
+                : Icon(
+                    Icons.favorite_border,
+                    color: const Color.fromARGB(255, 255, 9, 58),
+                    size: 35,
+                  ),
           ),
         ),
         Positioned(
@@ -168,17 +242,35 @@ class _productDetailsState extends State<productDetails> {
                 Padding(
                   padding: const EdgeInsets.only(
                       top: 20, bottom: 20, left: 20, right: 8),
-                  child: Container(
-                    width: 240,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Center(
-                        child: Text(
-                      "Add to cart",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    )),
+                  child: GestureDetector(
+                    onTap: () {
+                      doAnimation();
+                    },
+                    child: animateButton
+                        ? Container(
+                            width: 240,
+                            height: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ))
+                        : Container(
+                            width: 240,
+                            height: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Center(
+                                child: Text(
+                              "Add to cart",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            )),
+                          ),
                   ),
                 ),
                 GestureDetector(
