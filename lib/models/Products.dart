@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Products {
   String pid;
   String description;
@@ -16,14 +18,18 @@ class Products {
       required this.price,
       required this.pid});
 
-  factory Products.fromJson(Map<String, dynamic> json) => Products(
-        pid: json["pid"],
-        description: json["description"],
-        name: json["name"],
-        quantity: json["quantity"],
-        images: List<String>.from(json["images"].map((x) => x)),
-        price: json["price"],
-      );
+  factory Products.fromSnapshot(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+    return Products(
+      pid: doc.id,
+      description: data["description"] ?? "",
+      name: data["name"] ?? "",
+      quantity: data["quantity"] ?? "",
+      images: List<dynamic>.from(data["images"] ?? []),
+      price: data["price"] ?? "",
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "pid": pid,
