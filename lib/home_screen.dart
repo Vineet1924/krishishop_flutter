@@ -1,6 +1,10 @@
+// ignore_for_file: unused_label
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:krishishop/cart_screen.dart';
 import 'package:krishishop/components/my_card.dart';
 import 'package:krishishop/product_details.dart';
 import 'models/Products.dart';
@@ -13,35 +17,34 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  List<Products> products = [];
+  bool doCartAnimation = false;
+  var uid = FirebaseAuth.instance.currentUser!.uid;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> productStream;
+  late Stream<int> cartLengthStream;
+  int cart_Length = 0;
 
   @override
   void initState() {
     super.initState();
     EasyLoading.show(status: "Loading");
-    fetchProducts();
+    cartLengthStream = streamCartLength();
+    productStream =
+        FirebaseFirestore.instance.collection("Products").snapshots();
   }
 
-  void fetchProducts() async {
-    var documents =
-        await FirebaseFirestore.instance.collection("Products").get();
-    mapProducts(documents);
-  }
+  Stream<int> streamCartLength() {
+    CollectionReference cartRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('Cart');
 
-  mapProducts(QuerySnapshot<Map<String, dynamic>> documents) {
-    var productsList = documents.docs
-        .map((products) => Products(
-            pid: products.id,
-            description: products['description'],
-            name: products['name'],
-            quantity: products['quantity'],
-            images: products['images'],
-            price: products['price']))
-        .toList();
+    Query cartQuery = cartRef;
 
-    setState(() {
-      products = productsList;
-      EasyLoading.dismiss();
+    return cartQuery.snapshots().map<int>((QuerySnapshot<Object?> snapshots) {
+      setState(() {
+        cart_Length = snapshots.size;
+      });
+      return snapshots.size;
     });
   }
 
@@ -54,45 +57,101 @@ class _homeState extends State<home> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12),
-            controller: ScrollController(keepScrollOffset: false),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemCount: products.length,
-            itemBuilder: (context, Index) {
-              final product = products[Index];
-              return Container(
-                height: 350,
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.grey.shade400, width: 2)),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => productDetails(
-                                  product: product,
-                                )));
-                  },
-                  child: myCard(
-                    index: Index,
-                    name: products[Index].name,
-                    description: products[Index].description,
-                    quantity: products[Index].quantity,
-                    price: products[Index].price,
-                    image: products[Index].images[0],
-                  ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => cartScreen()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: Badge(
+                textColor: Colors.white,
+                label: Text(
+                  cart_Length.toString(),
+                  style: TextStyle(fontSize: 10),
                 ),
-              );
-            }),
+                backgroundColor: Colors.blue,
+                child: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
+      body: Stack(children: [
+        Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: StreamBuilder(
+                stream: productStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    print("inside waiting state");
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    print("Inside error state");
+                    return Text("Error ${snapshot.error}");
+                  } else {
+                    final documents = snapshot.data?.docs;
+                    List<Products> products = documents!
+                        .map((products) => Products(
+                            description: products['description'],
+                            name: products['name'],
+                            quantity: products['quantity'],
+                            images: products['images'],
+                            price: products['price'],
+                            pid: products.id))
+                        .toList();
+
+                    return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12),
+                        controller: ScrollController(keepScrollOffset: false),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: products.length,
+                        itemBuilder: (context, Index) {
+                          final product = products[Index];
+                          EasyLoading.dismiss();
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  (MaterialPageRoute(
+                                      builder: (context) =>
+                                          productDetails(product: product))));
+                            },
+                            child: myCard(
+                              index: Index,
+                              name: products[Index].name,
+                              description: products[Index].description,
+                              quantity: products[Index].quantity,
+                              price: products[Index].price,
+                              image: products[Index].images[0],
+                              pid: product.pid,
+                            ),
+                          );
+                        });
+                  }
+                })),
+        StreamBuilder<int>(
+          stream: cartLengthStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text('');
+            } else if (snapshot.hasError) {
+              return Text('');
+            } else {
+              return Text('');
+            }
+          },
+        )
+      ]),
     );
   }
 }

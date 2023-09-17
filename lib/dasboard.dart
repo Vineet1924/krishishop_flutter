@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:krishishop/favouriteScreen.dart';
 import 'package:krishishop/home_screen.dart';
 import 'package:krishishop/profile_screen.dart';
 import 'package:krishishop/search_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
-import 'cart_screen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -18,7 +17,7 @@ class _DashboardState extends State<Dashboard> {
   static const List<Widget> screens = <Widget>[
     home(),
     searchScreen(),
-    cartScreen(),
+    favouriteScreen(),
     profileScreen()
   ];
   var pageController = PageController();
@@ -64,8 +63,8 @@ class _DashboardState extends State<Dashboard> {
                     text: "Search",
                   ),
                   GButton(
-                    icon: Icons.shopping_cart_outlined,
-                    text: "Cart",
+                    icon: Icons.favorite_border_outlined,
+                    text: "Favourite",
                   ),
                   GButton(
                     icon: Icons.person,

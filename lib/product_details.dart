@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:krishishop/models/Cart.dart';
+import 'package:lottie/lottie.dart';
 import 'models/Products.dart';
 
 class productDetails extends StatefulWidget {
@@ -24,6 +26,9 @@ class _productDetailsState extends State<productDetails> {
   bool animateButton = false;
   String uid = FirebaseAuth.instance.currentUser!.uid;
   bool isAvailable = false;
+  bool doCartAnimation = false;
+  bool error = false;
+  int newQuantity = 0;
 
   Future<bool> isFavourite() async {
     await FirebaseFirestore.instance
@@ -60,6 +65,58 @@ class _productDetailsState extends State<productDetails> {
         animateButton = false;
       });
     });
+  }
+
+  Future<void> addToCart() async {
+    print(quantity);
+    if (quantity == "0") {
+      final snackBar = SnackBar(
+        content: Text(
+          'Product out of stock',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      Cart cartProduct = Cart(
+          image: images[0],
+          name: name,
+          pid: pid,
+          price: price,
+          quantity: quantity,
+          totalPrice: (int.parse(price) * (selectedQuantity)).toString());
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(uid)
+          .collection("Cart")
+          .doc()
+          .set(cartProduct.toJson());
+
+      setState(() {
+        doCartAnimation = true;
+
+        Future.delayed(Duration(seconds: 3), () {
+          setState(() {
+            doCartAnimation = false;
+          });
+        });
+      });
+    }
+  }
+
+  void showSnackBar(BuildContext context) {
+    if ("0" == "0") {
+      print("Equal");
+      final snackBar = SnackBar(
+        content: Text(
+          'Product out of stock',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override
@@ -243,8 +300,10 @@ class _productDetailsState extends State<productDetails> {
                   padding: const EdgeInsets.only(
                       top: 20, bottom: 20, left: 20, right: 8),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      showSnackBar(context);
                       doAnimation();
+                      await addToCart();
                     },
                     child: animateButton
                         ? Container(
@@ -333,7 +392,18 @@ class _productDetailsState extends State<productDetails> {
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(100)),
           ),
-        )
+        ),
+        if (doCartAnimation)
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Center(
+              child: LottieBuilder.asset(
+                "assets/animation/addedtocart.json",
+                height: 100,
+                width: 100,
+                repeat: false,
+              ),
+            ),
+          ]),
       ],
     );
   }

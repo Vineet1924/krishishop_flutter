@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
             background: Colors.grey.shade300,
             onBackground: Colors.grey.shade300,
             surface: Colors.grey.shade900,
-            onSurface: Color.fromARGB(255, 87, 87, 87)),
+            onSurface: Color.fromARGB(255, 220, 220, 220)),
         useMaterial3: true,
       ),
       home: SplashScreen(),

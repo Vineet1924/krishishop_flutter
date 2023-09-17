@@ -21,7 +21,6 @@ class profileScreen extends StatefulWidget {
 
 class _profileScreenState extends State<profileScreen> {
   User? auth = FirebaseAuth.instance.currentUser;
-
   final usernameController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
