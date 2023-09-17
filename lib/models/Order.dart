@@ -1,7 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:krishishop/models/Cart.dart';
-
 class OrderModel {
   String order_Id;
   String user_Id;
