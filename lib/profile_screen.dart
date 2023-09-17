@@ -8,7 +8,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:krishishop/components/icon_tile.dart';
 import 'package:krishishop/components/my_snackbar.dart';
+import 'package:krishishop/components/square_tile.dart';
 import 'package:krishishop/models/user.dart';
+import 'package:krishishop/orderList.dart';
 import 'components/my_textfield.dart';
 import 'firebase_services/firebase_auth_methods.dart';
 
@@ -387,10 +389,21 @@ class _profileScreenState extends State<profileScreen> {
                           Padding(
                             padding: const EdgeInsets.only(right: 30),
                             child: GestureDetector(
+                              child: SquareTile(
+                                  imagePath:
+                                      'assets/images/order-tracking.png'),
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => orderList()));
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 30),
+                            child: GestureDetector(
                               child: iconTile(icon: Icon(Icons.logout)),
                               onTap: signOut,
                             ),
-                          )
+                          ),
                         ],
                       ),
                     )

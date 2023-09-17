@@ -5,9 +5,14 @@ class OrderModel {
   String user_Id;
   String totalAmount;
   String orderDate;
-  List<String> items;
+  String packageDate;
+  String shippmentDate;
+  String deliveryDate;
+  List<dynamic> items;
   String order_status;
   String email;
+  String imageLink;
+  String address;
 
   OrderModel({
     required this.order_Id,
@@ -16,26 +21,40 @@ class OrderModel {
     required this.orderDate,
     required this.items,
     required this.order_status,
-    required this.email
+    required this.email,
+    required this.imageLink,
+    required this.address,
+    required this.packageDate,
+    required this.deliveryDate,
+    required this.shippmentDate,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
-        order_Id: json["order_Id"],
-        user_Id: json["user_Id"],
-        totalAmount: json["totalAmount"],
-        orderDate: json["orderDate"],
-        items: List<String>.from(json["items"].map((x) => x)),
-        order_status: json["order_status"],
-        email: json["email"],
-      );
+      order_Id: json["order_Id"],
+      user_Id: json["user_Id"],
+      totalAmount: json["totalAmount"],
+      orderDate: json["orderDate"],
+      items: List<dynamic>.from(json["items"].map((x) => x)),
+      order_status: json["order_status"],
+      email: json["email"],
+      imageLink: json["imageLink"],
+      address: json["address"],
+      packageDate: json["packageDate"],
+      deliveryDate: json["deliveryDate"],
+      shippmentDate: json["shippmentDate"]);
 
   Map<String, dynamic> toJson() => {
         "order_Id": order_Id,
         "user_Id": user_Id,
         "totalAmount": totalAmount,
         "orderDate": orderDate,
-        "items": List<String>.from(items.map((x) => x)),
+        "items": List<dynamic>.from(items.map((x) => x)),
         "order_status": order_status,
-        "email":email
+        "email": email,
+        "imageLink": imageLink,
+        "address": address,
+        "packageDate": packageDate,
+        "deliveryDate": deliveryDate,
+        "shippmentDate":shippmentDate,
       };
 }

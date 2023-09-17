@@ -14,6 +14,7 @@ import 'package:krishishop/components/my_button.dart';
 import 'package:krishishop/components/my_textfield.dart';
 import 'package:krishishop/dasboard.dart';
 import 'package:krishishop/models/Cart.dart';
+import 'package:krishishop/models/user.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:krishishop/models/Order.dart';
 
@@ -22,11 +23,12 @@ class OrderSammary extends StatefulWidget {
   int totalAmount = 0;
   List<Cart> order_items;
 
-  OrderSammary(
-      {super.key,
-      required this.items,
-      required this.totalAmount,
-      required this.order_items});
+  OrderSammary({
+    super.key,
+    required this.items,
+    required this.totalAmount,
+    required this.order_items,
+  });
 
   @override
   State<OrderSammary> createState() => _OrderSammaryState();
@@ -39,6 +41,7 @@ class _OrderSammaryState extends State<OrderSammary> {
   String currentLocation = '';
   var razorpay = Razorpay();
   User? auth = FirebaseAuth.instance.currentUser;
+  userModel? getUser;
 
   @override
   void initState() {
@@ -46,6 +49,14 @@ class _OrderSammaryState extends State<OrderSammary> {
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentFailure);
     razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+    loadUser();
+  }
+
+  Future<void> loadUser() async {
+    getUser = await userModel
+        .loadFromFirestore(FirebaseAuth.instance.currentUser!.uid);
+    addressController.text = getUser!.address!;
+    phoneController.text = getUser!.phone!;
   }
 
   Future<void> updateProductQuantity(List<Cart> items) async {
@@ -116,6 +127,8 @@ class _OrderSammaryState extends State<OrderSammary> {
       String orderDate = formatDate(dateTime).toString();
       String order_status = "Placed";
       String? email = auth?.email;
+      String imageLink = widget.order_items[0].image;
+      String address = getUser!.address!;
       List<String>? items = [];
 
       for (Cart item in widget.order_items) {
@@ -129,7 +142,12 @@ class _OrderSammaryState extends State<OrderSammary> {
           orderDate: orderDate,
           items: items,
           order_status: order_status,
-          email: email!);
+          email: email!,
+          imageLink: imageLink,
+          address: address,
+          deliveryDate: "",
+          packageDate: "",
+          shippmentDate: "");
       await orderCollection.doc(order.order_Id).set(order.toJson());
       print("Order saved");
     } catch (e) {
@@ -144,7 +162,7 @@ class _OrderSammaryState extends State<OrderSammary> {
     await createOrder();
     await cleanCart();
     EasyLoading.dismiss();
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => Dashboard()));
   }
 

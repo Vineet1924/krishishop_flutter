@@ -106,7 +106,7 @@ class _productDetailsState extends State<productDetails> {
   }
 
   void showSnackBar(BuildContext context) {
-    if ("0" == "0") {
+    if (quantity == "0") {
       print("Equal");
       final snackBar = SnackBar(
         content: Text(

@@ -147,15 +147,6 @@ class _SignupPageState extends State<SignupPage> {
                         signInWithGoogle();
                       },
                     ),
-                    SizedBox(
-                      width: 25,
-                    ),
-                    SquareTile(
-                      imagePath: 'assets/images/facebook.png',
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
                   ],
                 ),
                 SizedBox(height: 20),
