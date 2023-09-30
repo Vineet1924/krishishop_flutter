@@ -301,7 +301,6 @@ class _productDetailsState extends State<productDetails> {
                       top: 20, bottom: 20, left: 20, right: 8),
                   child: GestureDetector(
                     onTap: () async {
-                      showSnackBar(context);
                       doAnimation();
                       await addToCart();
                     },

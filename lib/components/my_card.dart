@@ -108,7 +108,6 @@ class _myCardState extends State<myCard> {
                   style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
                 ),
               ),
-              const SizedBox(height: 1),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
@@ -119,7 +118,6 @@ class _myCardState extends State<myCard> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(height: 1),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: widget.quantity == "0"

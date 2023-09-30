@@ -45,19 +45,22 @@ class _profileScreenState extends State<profileScreen> {
   }
 
   Future<void> loadUser() async {
-    userModel? loadUser = await userModel
-        .loadFromFirestore(FirebaseAuth.instance.currentUser!.uid);
+    userModel? loadUser = await userModel.getUserData(auth!.uid);
 
     setState(() {
-      if (loadUser?.profilepic != null) {
-        imageLink = loadUser!.profilepic!;
+      if (loadUser.profilepic != null) {
+        imageLink = loadUser.profilepic!;
       } else {
         imageLink = "";
       }
 
-      username = loadUser?.username;
-      address = loadUser?.address;
-      phone = loadUser?.phone;
+      username = loadUser.username;
+      address = loadUser.address;
+      phone = loadUser.phone;
+
+      print(username);
+      print(address);
+      print(phone);
 
       usernameController.text = username ?? 'Username';
       addressController.text = address ?? 'Address';
@@ -122,14 +125,20 @@ class _profileScreenState extends State<profileScreen> {
                     address = addressCupertino.text;
                     phone = phoneCupertino.text;
 
+                    if (phone?.length != 10) {
+                      EasyLoading.dismiss();
+                      showErrorSnackBar(context, "Enter valid phone number");
+                      Navigator.of(context).pop();
+                      return;
+                    }
+
                     userModel storeUser = userModel(
                         address: address,
                         email: email,
                         phone: phone,
                         profilepic: imageLink,
                         uid: uid,
-                        username: username,
-                        usertype: "user");
+                        username: username);
 
                     await storeUser.storeAddress();
                     await storeUser.storeUsername();
@@ -262,7 +271,7 @@ class _profileScreenState extends State<profileScreen> {
               Container(
                 height: 270,
                 decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: Colors.grey.shade900,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(60),
                         bottomRight: Radius.circular(60))),
@@ -393,7 +402,10 @@ class _profileScreenState extends State<profileScreen> {
                                   imagePath:
                                       'assets/images/order-tracking.png'),
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => orderList()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => orderList()));
                               },
                             ),
                           ),

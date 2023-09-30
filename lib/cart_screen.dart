@@ -64,7 +64,7 @@ class _cartScreenState extends State<cartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.grey.shade900,
           centerTitle: true,
           title: Text(
             "Krishishop",

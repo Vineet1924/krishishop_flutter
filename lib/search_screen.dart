@@ -67,10 +67,6 @@ class _searchScreenState extends State<searchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Search"),
-        centerTitle: true,
-      ),
       body: Padding(
         padding: EdgeInsets.all(12),
         child: Column(

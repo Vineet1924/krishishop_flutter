@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:krishishop/components/my_snackbar.dart';
 import 'package:krishishop/login_page.dart';
 import '../dasboard.dart';
-import '../models/user.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth auth;
@@ -26,7 +25,13 @@ class FirebaseAuthMethods {
 
         var firebaseUser = await auth.currentUser!;
         var uid = firebaseUser.uid;
-        final userData = {"uid": uid, "email": email};
+        final userData = {
+          "uid": uid,
+          "email": email,
+          "address": "",
+          "profilepic": "",
+          "username": ""
+        };
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(uid)
@@ -62,10 +67,12 @@ class FirebaseAuthMethods {
           .then((value) async {
         await EasyLoading.dismiss();
 
-        userModel? loadUser = await userModel
-            .loadFromFirestore(FirebaseAuth.instance.currentUser!.uid);
-        print(loadUser?.uid);
-        if (loadUser?.uid == "" || loadUser == null) {
+        final loadUser = await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(auth.currentUser?.uid)
+            .get();
+        print(!loadUser.exists);
+        if (!loadUser.exists) {
           showErrorSnackBar(context, "You can't login with admin account");
 
           try {

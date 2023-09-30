@@ -13,6 +13,7 @@ class OrderModel {
   String email;
   String imageLink;
   String address;
+  String customerName;
 
   OrderModel({
     required this.order_Id,
@@ -27,11 +28,13 @@ class OrderModel {
     required this.packageDate,
     required this.deliveryDate,
     required this.shippmentDate,
+    required this.customerName,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
       order_Id: json["order_Id"],
       user_Id: json["user_Id"],
+      customerName: json["customerName"],
       totalAmount: json["totalAmount"],
       orderDate: json["orderDate"],
       items: List<dynamic>.from(json["items"].map((x) => x)),
@@ -55,6 +58,7 @@ class OrderModel {
         "address": address,
         "packageDate": packageDate,
         "deliveryDate": deliveryDate,
-        "shippmentDate":shippmentDate,
+        "shippmentDate": shippmentDate,
+        "customerName": customerName,
       };
 }

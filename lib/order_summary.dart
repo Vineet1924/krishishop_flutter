@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unused_local_variable
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -37,6 +37,7 @@ class OrderSammary extends StatefulWidget {
 class _OrderSammaryState extends State<OrderSammary> {
   final addressController = TextEditingController();
   final phoneController = TextEditingController();
+  final usernameController = TextEditingController();
   bool showSuffixIcon = false;
   String currentLocation = '';
   var razorpay = Razorpay();
@@ -53,10 +54,27 @@ class _OrderSammaryState extends State<OrderSammary> {
   }
 
   Future<void> loadUser() async {
-    getUser = await userModel
-        .loadFromFirestore(FirebaseAuth.instance.currentUser!.uid);
-    addressController.text = getUser!.address!;
-    phoneController.text = getUser!.phone!;
+    getUser =
+        await userModel.getUserData(FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      if (getUser?.address != null) {
+        addressController.text = getUser!.address!;
+      } else {
+        addressController.text = "";
+      }
+
+      if (getUser?.phone != null) {
+        phoneController.text = getUser!.phone!;
+      } else {
+        phoneController.text = "";
+      }
+
+      if (getUser?.username != null) {
+        usernameController.text = getUser!.username!;
+      } else {
+        usernameController.text = "";
+      }
+    });
   }
 
   Future<void> updateProductQuantity(List<Cart> items) async {
@@ -116,6 +134,10 @@ class _OrderSammaryState extends State<OrderSammary> {
   }
 
   Future<void> createOrder() async {
+    final userDoc = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(auth?.uid)
+        .get();
     CollectionReference<Map<String, dynamic>> orderCollection =
         FirebaseFirestore.instance.collection("Orders");
 
@@ -128,7 +150,8 @@ class _OrderSammaryState extends State<OrderSammary> {
       String order_status = "Placed";
       String? email = auth?.email;
       String imageLink = widget.order_items[0].image;
-      String address = getUser!.address!;
+      String address = addressController.text;
+      String name = usernameController.text;
       List<String>? items = [];
 
       for (Cart item in widget.order_items) {
@@ -145,6 +168,7 @@ class _OrderSammaryState extends State<OrderSammary> {
           email: email!,
           imageLink: imageLink,
           address: address,
+          customerName: name,
           deliveryDate: "",
           packageDate: "",
           shippmentDate: "");
@@ -213,7 +237,7 @@ class _OrderSammaryState extends State<OrderSammary> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.grey.shade900,
             centerTitle: true,
             title: Text(
               "Krishishop",
@@ -225,6 +249,13 @@ class _OrderSammaryState extends State<OrderSammary> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                MyTextField(
+                    controller: usernameController,
+                    hintText: "Username",
+                    obscureText: false,
+                    inputType: TextInputType.text,
+                    isEditable: true),
+                SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.only(
                     right: 25,
@@ -295,8 +326,7 @@ class _OrderSammaryState extends State<OrderSammary> {
                       });
                     },
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(
-                          10), // Limit input to 10 characters
+                      LengthLimitingTextInputFormatter(10),
                     ],
                   ),
                 ),
@@ -478,6 +508,16 @@ class _OrderSammaryState extends State<OrderSammary> {
                               final snackBar = SnackBar(
                                 content: Text(
                                   'Enter Valid Phone Number',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            } else if (usernameController.text == "") {
+                              final snackBar = SnackBar(
+                                content: Text(
+                                  'Enter Valid username',
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 backgroundColor: Colors.red,

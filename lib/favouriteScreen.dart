@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:krishishop/cart_screen.dart';
-import 'package:krishishop/components/my_button.dart';
-import 'package:krishishop/models/Cart.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:krishishop/components/my_card.dart';
+import 'package:krishishop/models/Products.dart';
+import 'package:krishishop/product_details.dart';
 
 class favouriteScreen extends StatefulWidget {
   const favouriteScreen({super.key});
@@ -12,92 +14,93 @@ class favouriteScreen extends StatefulWidget {
 }
 
 class _favouriteScreenState extends State<favouriteScreen> {
-  final List<Cart> cart = [];
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  List<Products> favProducts = [];
+
+  Future<List<Products>> getFavouriteProducts() async {
+    List<String> pids = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> favouriteSnapshot =
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(uid)
+              .collection("Favourite")
+              .get();
+
+      favouriteSnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data();
+        pids.add(data["pid"]);
+      });
+
+      List<Products> favouriteProducts = [];
+
+      for (String pid in pids) {
+        DocumentSnapshot<Map<String, dynamic>> productSnapshot =
+            await FirebaseFirestore.instance
+                .collection('Products')
+                .doc(pid)
+                .get();
+
+        if (productSnapshot.exists) {
+          favouriteProducts.add(Products.fromSnapshot(productSnapshot));
+        }
+      }
+
+      return favouriteProducts;
+    } catch (e) {
+      print(e);
+      List<Products> list = [];
+      return list;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getFavouriteProducts().then((loadedProducts) {
+      setState(() {
+        favProducts = loadedProducts;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        title: Text(
-          "Krishishop",
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => cartScreen()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Badge(
-                textColor: Colors.white,
-                label: Text(
-                  "1",
-                  style: TextStyle(fontSize: 10),
-                ),
-                backgroundColor: Colors.blue,
-                child: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
-        child: cart.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    LottieBuilder.asset(
-                      "assets/animation/emptycart.json",
-                      height: 200.0,
-                      repeat: true,
-                      reverse: false,
-                      animate: true,
-                    )
-                  ],
-                ),
-              )
-            : Stack(children: [
-                Positioned(
-                  top: 15,
-                  left: 15,
-                  child: Container(
-                    width: 380,
-                    height: 704,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    child: GridView.builder(
-                        itemCount: 10,
-                        controller: ScrollController(keepScrollOffset: false),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 4),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            width: 200,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(12)),
-                          );
-                        }),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12),
+              controller: ScrollController(keepScrollOffset: false),
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: favProducts.length,
+              itemBuilder: (context, Index) {
+                final product = favProducts[Index];
+                EasyLoading.dismiss();
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        (MaterialPageRoute(
+                            builder: (context) =>
+                                productDetails(product: product))));
+                  },
+                  child: myCard(
+                    index: Index,
+                    name: favProducts[Index].name,
+                    description: favProducts[Index].description,
+                    quantity: favProducts[Index].quantity,
+                    price: favProducts[Index].price,
+                    image: favProducts[Index].images[0],
+                    pid: product.pid,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 640, bottom: 5),
-                  child: MyButton(onTap: () {}, title: "Checkout"),
-                )
-              ]),
+                );
+              }),
+        ),
       ),
     );
   }

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:krishishop/cart_screen.dart';
 import 'package:krishishop/components/my_card.dart';
 import 'package:krishishop/product_details.dart';
 import 'models/Products.dart';
@@ -51,36 +50,6 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Krishishop",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => cartScreen()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Badge(
-                textColor: Colors.white,
-                label: Text(
-                  cart_Length.toString(),
-                  style: TextStyle(fontSize: 10),
-                ),
-                backgroundColor: Colors.blue,
-                child: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
       body: Stack(children: [
         Padding(
             padding: const EdgeInsets.all(12.0),

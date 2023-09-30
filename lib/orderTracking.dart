@@ -133,7 +133,7 @@ class _orderTrackingState extends State<orderTracking> {
                     content: Padding(
                       padding: const EdgeInsets.only(right: 138.0),
                       child: Text(
-                        "Order Shipped at ${shippmentDate}",
+                        "Order Shipping at ${shippmentDate}",
                         style: TextStyle(
                             color: Colors.grey.shade500,
                             fontSize: 16,
@@ -161,7 +161,7 @@ class _orderTrackingState extends State<orderTracking> {
                     content: Padding(
                       padding: const EdgeInsets.only(right: 138.0),
                       child: Text(
-                        "Order Delivered at ${deliveryDate}",
+                        "Order Delivered ${deliveryDate}",
                         style: TextStyle(
                             color: Colors.grey.shade500,
                             fontSize: 16,

@@ -56,7 +56,8 @@ class _orderListState extends State<orderList> {
                         address: order['address'],
                         packageDate: order['packageDate'],
                         deliveryDate: order['deliveryDate'],
-                        shippmentDate: order['shippmentDate']))
+                        shippmentDate: order['shippmentDate'],
+                        customerName: order['customerName']))
                     .toList();
                 return ListView.builder(
                     controller: ScrollController(keepScrollOffset: false),
